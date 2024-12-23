@@ -31,6 +31,7 @@ export type ZodTypes = {
   ZodUnknown: z.ZodUnknown;
   ZodVoid: z.ZodVoid;
   ZodDate: z.ZodDate;
+  ZodLazy: z.ZodLazy<any>;
 };
 
 export function isZodType<TypeName extends keyof ZodTypes>(

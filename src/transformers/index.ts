@@ -1,5 +1,5 @@
 import { SchemaObject, ReferenceObject, MapSubSchema } from '../types';
-import { ZodType } from 'zod';
+import { ZodLazy, ZodType, ZodTypeAny } from 'zod';
 import { UnknownZodTypeError } from '../errors';
 import { isZodType } from '../lib/zod-is-type';
 import { Metadata } from '../metadata';
@@ -44,6 +44,11 @@ export class OpenApiTransformer {
     generateSchemaRef: (ref: string) => string,
     defaultValue?: T
   ): SchemaObject | ReferenceObject {
+    if (isZodType(zodSchema, 'ZodLazy')) {
+      const value = zodSchema as ZodLazy<ZodTypeAny>;
+      return this.transform(value.schema, isNullable, mapItem, generateSchemaRef, defaultValue);
+    }
+
     if (isZodType(zodSchema, 'ZodNull')) {
       return this.versionSpecifics.nullType;
     }
@@ -77,6 +82,11 @@ export class OpenApiTransformer {
     mapItem: MapSubSchema,
     generateSchemaRef: (ref: string) => string
   ): SchemaObject | ReferenceObject {
+    if (isZodType(zodSchema, 'ZodLazy')) {
+      const value = zodSchema as ZodLazy<ZodTypeAny>;
+      return this.transformSchemaWithoutDefault(value.schema, isNullable, mapItem, generateSchemaRef);
+    }
+
     if (isZodType(zodSchema, 'ZodUnknown') || isZodType(zodSchema, 'ZodAny')) {
       return this.versionSpecifics.mapNullableType(undefined, isNullable);
     }
