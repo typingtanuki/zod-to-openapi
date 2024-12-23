@@ -46,7 +46,13 @@ export class OpenApiTransformer {
   ): SchemaObject | ReferenceObject {
     if (isZodType(zodSchema, 'ZodLazy')) {
       const value = zodSchema as ZodLazy<ZodTypeAny>;
-      return this.transform(value.schema, isNullable, mapItem, generateSchemaRef, defaultValue);
+      return this.transform(
+        value.schema,
+        isNullable,
+        mapItem,
+        generateSchemaRef,
+        defaultValue
+      );
     }
 
     if (isZodType(zodSchema, 'ZodNull')) {
@@ -84,7 +90,12 @@ export class OpenApiTransformer {
   ): SchemaObject | ReferenceObject {
     if (isZodType(zodSchema, 'ZodLazy')) {
       const value = zodSchema as ZodLazy<ZodTypeAny>;
-      return this.transformSchemaWithoutDefault(value.schema, isNullable, mapItem, generateSchemaRef);
+      return this.transformSchemaWithoutDefault(
+        value.schema,
+        isNullable,
+        mapItem,
+        generateSchemaRef
+      );
     }
 
     if (isZodType(zodSchema, 'ZodUnknown') || isZodType(zodSchema, 'ZodAny')) {
